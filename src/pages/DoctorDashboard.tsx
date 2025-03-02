@@ -26,7 +26,7 @@ const DoctorDashboard: React.FC = () => {
   const fetchPatients = async () => {
     setLoading(true);
     try {
-      const res = await axios.get('/api/patients');
+      const res = await axios.get('https://clinic-backend-ichg.onrender.com/api/patients');
       setPatients(res.data);
       setError('');
     } catch (err: any) {
