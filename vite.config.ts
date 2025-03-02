@@ -10,7 +10,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:5000',
+        target: 'https://clinic-backend-roan.vercel.app',
         changeOrigin: true,
       },
     },

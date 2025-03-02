@@ -33,7 +33,7 @@ const PatientRegistration: React.FC = () => {
     setSuccess('');
     
     try {
-      await axios.post('http://localhost:5000/api/patients', formData);
+      await axios.post('https://clinic-backend-roan.vercel.app/api/patients', formData);
       setSuccess('Registration successful! Your information has been saved.');
       setFormData({
         fullName: '',
