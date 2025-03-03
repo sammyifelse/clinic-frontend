@@ -35,7 +35,7 @@ const Register: React.FC = () => {
     }
     
     try {
-      await axios.post('https://clinic-backend-ichg.onrender.com/api/auth/register', {
+      await axios.post('https://clinic-backend-kappa.vercel.app/api/auth/register', {
         name: formData.name,
         email: formData.email,
         password: formData.password,

@@ -10,7 +10,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://clinic-backend-ichg.onrender.com',
+        target: 'https://clinic-backend-kappa.vercel.app',
         changeOrigin: true,
       },
     },

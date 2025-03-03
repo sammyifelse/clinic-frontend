@@ -37,7 +37,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
       if (token) {
         try {
           axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-          const res = await axios.get('https://clinic-backend-ichg.onrender.com/api/auth/user');
+          const res = await axios.get('https://clinic-backend-kappa.vercel.app/api/auth/user');
           setUser(res.data); // ✅ Store user details
         } catch (err) {
           localStorage.removeItem('token');
@@ -57,7 +57,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
     try {
-      const res = await axios.get('https://clinic-backend-ichg.onrender.com/api/auth/user'); // ✅ Fetch user details on login
+      const res = await axios.get('https://clinic-backend-kappa.vercel.app/api/auth/user'); // ✅ Fetch user details on login
       setUser(res.data);
     } catch (err) {
       logout(); // If token is invalid, logout
