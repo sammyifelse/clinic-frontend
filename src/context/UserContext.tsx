@@ -58,18 +58,18 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     },);
 
     const login = async (token: string) => {
-        localStorage.setItem('token', token);
-        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-
-        try {
-            const res = await axios.get('https://clinic-backend-p4fx.onrender.com/api/auth/user');
-            setUser(res.data);
-            setIsLoggedIn(true); // Update isLoggedIn after successful login
-        } catch (err) {
-            logout();
-        }
-    };
-
+      localStorage.setItem('token', token);
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+  
+      try {
+          const res = await axios.get('https://clinic-backend-p4fx.onrender.com/api/auth/user');
+          setUser(res.data);
+          setIsLoggedIn(true);
+          setLoading(false); // Add this
+      } catch (err) {
+          logout();
+      }
+  };
     const logout = () => {
         localStorage.removeItem('token');
         delete axios.defaults.headers.common['Authorization'];
