@@ -28,7 +28,7 @@ const Login: React.FC = () => {
     setError('');
     
     try {
-      const res = await axios.post('https://clinic-backend-kappa.vercel.app/api/auth/login', formData);
+      const res = await axios.post('https://clinic-backend-p4fx.onrender.com/api/auth/login', formData);
       login(res.data.token);
       
       // Redirect based on role

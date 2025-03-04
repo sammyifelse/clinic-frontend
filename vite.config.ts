@@ -10,7 +10,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://clinic-backend-kappa.vercel.app',
+        target: 'https://clinic-backend-p4fx.onrender.com',
         changeOrigin: true,
       },
     },

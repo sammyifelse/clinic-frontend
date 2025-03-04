@@ -33,7 +33,7 @@ const PatientRegistration: React.FC = () => {
     setSuccess('');
     
     try {
-      await axios.post('https://clinic-backend-kappa.vercel.app/api/patients', formData);
+      await axios.post('https://clinic-backend-p4fx.onrender.com/api/patients', formData);
       setSuccess('Registration successful! Your information has been saved.');
       setFormData({
         fullName: '',
