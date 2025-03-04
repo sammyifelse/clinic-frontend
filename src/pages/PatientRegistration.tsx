@@ -12,6 +12,9 @@ const PatientRegistration: React.FC = () => {
     medicalHistory: '',
     currentMedications: '',
     allergies: '',
+    disease: '', // Add disease
+    symptoms: '', // Add symptoms
+    diagnosis: '', // Add diagnosis
     chiefComplaint: ''
   });
   
@@ -44,6 +47,9 @@ const PatientRegistration: React.FC = () => {
         medicalHistory: '',
         currentMedications: '',
         allergies: '',
+        disease: '', // Add disease
+        symptoms: '', // Add symptoms
+        diagnosis: '', // Add diagnosis
         chiefComplaint: ''
       });
     } catch (err: any) {

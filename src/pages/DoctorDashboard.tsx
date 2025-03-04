@@ -26,16 +26,21 @@ const DoctorDashboard: React.FC = () => {
   const fetchPatients = async () => {
     setLoading(true);
     try {
-      const res = await axios.get('https://clinic-backend-p4fx.onrender.com/api/patients');
-      setPatients(res.data);
-      setError('');
+        const token = localStorage.getItem('token'); // Get the token from local storage
+        const res = await axios.get('https://clinic-backend-p4fx.onrender.com/api/patients', {
+            headers: {
+                Authorization: `Bearer ${token}` // Include the token
+            }
+        });
+        setPatients(res.data);
+        setError('');
     } catch (err: any) {
-      setError('Failed to fetch patients. Please try again.');
-      console.error(err);
+        setError('Failed to fetch patients. Please try again.');
+        console.error(err);
     } finally {
-      setLoading(false);
+        setLoading(false);
     }
-  };
+};
 
   useEffect(() => {
     fetchPatients();
