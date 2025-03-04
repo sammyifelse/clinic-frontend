@@ -11,7 +11,7 @@ interface User {
 interface UserContextType {
     user: User | null;
     loading: boolean;
-    isLoggedIn: boolean; // Add isLoggedIn state
+    isLoggedIn: boolean;
     login: (token: string) => Promise<void>;
     logout: () => void;
 }
@@ -19,7 +19,7 @@ interface UserContextType {
 export const UserContext = createContext<UserContextType>({
     user: null,
     loading: true,
-    isLoggedIn: false, // Initialize isLoggedIn
+    isLoggedIn: false,
     login: async () => { },
     logout: () => { },
 });
@@ -31,7 +31,7 @@ interface UserProviderProps {
 export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
-    const [isLoggedIn, setIsLoggedIn] = useState(false); // Add isLoggedIn state
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     useEffect(() => {
         const checkLoggedIn = async () => {
@@ -42,34 +42,37 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
                     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
                     const res = await axios.get('https://clinic-backend-p4fx.onrender.com/api/auth/user');
                     setUser(res.data);
-                    setIsLoggedIn(true); // Update isLoggedIn after successful login
+                    setIsLoggedIn(true);
                 } catch (err) {
-                    localStorage.removeItem('token');
-                    delete axios.defaults.headers.common['Authorization'];
-                    setUser(null);
-                    setIsLoggedIn(false);
+                    console.error('Error fetching user:', err);
+                    logout();
                 }
+            } else {
+                setUser(null);
+                setIsLoggedIn(false);
             }
 
             setLoading(false);
         };
 
         checkLoggedIn();
-    },);
+    }, []);
 
     const login = async (token: string) => {
-      localStorage.setItem('token', token);
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-  
-      try {
-          const res = await axios.get('https://clinic-backend-p4fx.onrender.com/api/auth/user');
-          setUser(res.data);
-          setIsLoggedIn(true);
-          setLoading(false); // Add this
-      } catch (err) {
-          logout();
-      }
-  };
+        localStorage.setItem('token', token);
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+        try {
+            const res = await axios.get('https://clinic-backend-p4fx.onrender.com/api/auth/user');
+            setUser(res.data);
+            setIsLoggedIn(true);
+        } catch (err) {
+            logout();
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const logout = () => {
         localStorage.removeItem('token');
         delete axios.defaults.headers.common['Authorization'];
