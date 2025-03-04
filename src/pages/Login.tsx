@@ -26,23 +26,32 @@ const Login: React.FC = () => {
     e.preventDefault();
     setLoading(true);
     setError('');
-    
+
     try {
-      const res = await axios.post('https://clinic-backend-p4fx.onrender.com/api/auth/login', formData);
-      login(res.data.token);
-      
-      // Redirect based on role
-      if (res.data.user.role === 'doctor') {
-        navigate('/doctor-dashboard');
-      } else {
-        navigate('/patient-registration');
-      }
+        const res = await axios.post('https://clinic-backend-p4fx.onrender.com/api/auth/login', formData);
+        console.log('Login Response:', res.data); // Log the response data
+        console.log('User Role:', res.data.user.role); // Log the role
+        login(res.data.token)
+            .then(() => {
+                // Redirect based on role
+                if (res.data.user.role === 'doctor') {
+                  console.log('Redirecting to /doctor-dashboard'); // Log the path
+                    navigate('/doctor-dashboard');
+                } else {
+                  console.log('Redirecting to /patient-registration'); // Log the path
+                  navigate('/patient-registration');
+                }
+            })
+            .catch((err) => {
+                console.error("Error during login:", err);
+                setError('Login failed. Please try again.');
+            });
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Login failed. Please try again.');
+        setError(err.response?.data?.message || 'Login failed. Please try again.');
     } finally {
-      setLoading(false);
+        setLoading(false);
     }
-  };
+};
 
   return (
     <div className="max-w-md mx-auto bg-white rounded-lg shadow-md overflow-hidden mt-10">
