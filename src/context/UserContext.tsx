@@ -20,8 +20,8 @@ export const UserContext = createContext<UserContextType>({
     user: null,
     loading: true,
     isLoggedIn: false,
-    login: async () => {},
-    logout: () => {},
+    login: async () => { },
+    logout: () => { },
 });
 
 interface UserProviderProps {
@@ -36,13 +36,11 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     useEffect(() => {
         const checkLoggedIn = async () => {
             const token = localStorage.getItem('token');
-            console.log("Token found:", token);
 
             if (token) {
                 try {
                     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
                     const res = await axios.get('https://clinic-backend-p4fx.onrender.com/api/auth/user');
-                    console.log("User data received:", res.data);
                     setUser(res.data);
                     setIsLoggedIn(true);
                 } catch (err) {
@@ -58,18 +56,17 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
         };
 
         checkLoggedIn();
-    }, []); // ✅ Removed isLoggedIn from dependencies to prevent infinite loop
+    }, [isLoggedIn]); // Dependency on `isLoggedIn`
 
     const login = async (token: string) => {
-        console.log("Logging in with token:", token);
         localStorage.setItem('token', token);
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
+        setIsLoggedIn(true); // Ensure `isLoggedIn` is updated before fetching user
+
         try {
             const res = await axios.get('https://clinic-backend-p4fx.onrender.com/api/auth/user');
-            console.log("Login successful, user data:", res.data);
             setUser(res.data);
-            setIsLoggedIn(true);
         } catch (err) {
             console.error('Login failed:', err);
             logout();
@@ -79,7 +76,6 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     };
 
     const logout = () => {
-        console.log("Logging out...");
         localStorage.removeItem('token');
         delete axios.defaults.headers.common['Authorization'];
         setUser(null);

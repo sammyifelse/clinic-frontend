@@ -8,7 +8,7 @@ import PatientRegistration from './pages/PatientRegistration';
 import ProtectedRoute from './components/ProtectedRoute';
 import Navbar from './components/Navbar';
 
-const App: React.FC = () => {
+function App() {
   return (
     <UserProvider>
       <Router>
