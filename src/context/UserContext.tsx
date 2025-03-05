@@ -20,8 +20,8 @@ export const UserContext = createContext<UserContextType>({
     user: null,
     loading: true,
     isLoggedIn: false,
-    login: async () => {},
-    logout: () => {},
+    login: async () => { },
+    logout: () => { },
 });
 
 interface UserProviderProps {
@@ -29,22 +29,19 @@ interface UserProviderProps {
 }
 
 export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
-    const [user, setUser] = useState<User | null>(() => {
-        const storedUser = localStorage.getItem('user');
-        return storedUser ? JSON.parse(storedUser) : null;
-    });
+    const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
     const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token'));
 
     useEffect(() => {
         const checkLoggedIn = async () => {
             const token = localStorage.getItem('token');
+
             if (token) {
                 try {
                     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
                     const res = await axios.get('https://clinic-backend-p4fx.onrender.com/api/auth/user');
-                    setUser(res.data.user);
-                    localStorage.setItem('user', JSON.stringify(res.data.user)); // Store in localStorage
+                    setUser(res.data);
                     setIsLoggedIn(true);
                 } catch (err) {
                     console.error('Error fetching user:', err);
@@ -54,11 +51,12 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
                 setUser(null);
                 setIsLoggedIn(false);
             }
+
             setLoading(false);
         };
 
         checkLoggedIn();
-    }, []);
+    }, []); // Only run on mount
 
     const login = async (token: string) => {
         localStorage.setItem('token', token);
@@ -66,8 +64,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
 
         try {
             const res = await axios.get('https://clinic-backend-p4fx.onrender.com/api/auth/user');
-            setUser(res.data.user);
-            localStorage.setItem('user', JSON.stringify(res.data.user));
+            setUser(res.data);
             setIsLoggedIn(true);
         } catch (err) {
             console.error('Login failed:', err);
@@ -79,7 +76,6 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
 
     const logout = () => {
         localStorage.removeItem('token');
-        localStorage.removeItem('user');
         delete axios.defaults.headers.common['Authorization'];
         setUser(null);
         setIsLoggedIn(false);
