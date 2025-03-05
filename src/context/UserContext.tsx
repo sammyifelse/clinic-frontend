@@ -64,7 +64,9 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
 
         try {
             const res = await axios.get('https://clinic-backend-p4fx.onrender.com/api/auth/user');
+            console.log("UserContext: API Response:", res.data);
             setUser(res.data);
+            console.log("UserContext: User State:", user); // Log the user state after update
             setIsLoggedIn(true);
         } catch (err) {
             console.error('Login failed:', err);
