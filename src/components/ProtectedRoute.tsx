@@ -19,11 +19,12 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, role }) => {
     console.log("Required Role:", role);
     console.log("isLoggedIn:", isLoggedIn);
 
-    if (!isLoggedIn) {
+    if (!isLoggedIn || !user) {
         return <Navigate to="/login" replace />;
     }
 
     if (role && user?.role !== role) {
+        console.warn(`Access denied: Expected role '${role}', but got '${user?.role}'`);
         return <Navigate to="/not-authorized" replace />;
     }
 

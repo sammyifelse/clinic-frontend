@@ -56,17 +56,16 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
         };
 
         checkLoggedIn();
-    }, [isLoggedIn]); // Dependency on `isLoggedIn`
+    }, []); // Only run on mount
 
     const login = async (token: string) => {
         localStorage.setItem('token', token);
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
-        setIsLoggedIn(true); // Ensure `isLoggedIn` is updated before fetching user
-
         try {
             const res = await axios.get('https://clinic-backend-p4fx.onrender.com/api/auth/user');
             setUser(res.data);
+            setIsLoggedIn(true);
         } catch (err) {
             console.error('Login failed:', err);
             logout();
