@@ -14,7 +14,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, role }) => {
         return <div className="flex justify-center items-center h-screen">Loading...</div>;
     }
 
-    console.log("User:", user);
+    console.log("User from Context:", user);
     console.log("User Role:", user?.role);
     console.log("Required Role:", role);
     console.log("isLoggedIn:", isLoggedIn);
