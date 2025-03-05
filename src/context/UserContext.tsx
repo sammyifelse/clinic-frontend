@@ -31,7 +31,7 @@ interface UserProviderProps {
 export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token'));
 
     useEffect(() => {
         const checkLoggedIn = async () => {
@@ -56,17 +56,19 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
         };
 
         checkLoggedIn();
-    }, []);
+    }, [isLoggedIn]); // Dependency on `isLoggedIn`
 
     const login = async (token: string) => {
         localStorage.setItem('token', token);
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
+        setIsLoggedIn(true); // Ensure `isLoggedIn` is updated before fetching user
+
         try {
             const res = await axios.get('https://clinic-backend-p4fx.onrender.com/api/auth/user');
             setUser(res.data);
-            setIsLoggedIn(true);
         } catch (err) {
+            console.error('Login failed:', err);
             logout();
         } finally {
             setLoading(false);

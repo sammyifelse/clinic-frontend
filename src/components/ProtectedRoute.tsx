@@ -4,7 +4,7 @@ import { UserContext } from '../context/UserContext';
 
 interface ProtectedRouteProps {
     children: React.ReactNode;
-    role: string;
+    role?: string;
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, role }) => {
@@ -13,6 +13,11 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, role }) => {
     if (loading) {
         return <div className="flex justify-center items-center h-screen">Loading...</div>;
     }
+
+    console.log("User:", user);
+    console.log("User Role:", user?.role);
+    console.log("Required Role:", role);
+    console.log("isLoggedIn:", isLoggedIn);
 
     if (!isLoggedIn) {
         return <Navigate to="/login" replace />;
