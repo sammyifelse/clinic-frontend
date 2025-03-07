@@ -117,7 +117,7 @@ const Register: React.FC = () => {
               value={formData.password}
               onChange={handleChange}
               required
-              minLength={6}
+              minLength={3}
             />
           </div>
 
@@ -134,7 +134,7 @@ const Register: React.FC = () => {
               value={formData.confirmPassword}
               onChange={handleChange}
               required
-              minLength={6}
+              minLength={3}
             />
           </div>
 
