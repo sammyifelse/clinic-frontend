@@ -27,34 +27,28 @@ const Register: React.FC = () => {
     e.preventDefault();
     setLoading(true);
     setError('');
-  
+    
     if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match');
       setLoading(false);
       return;
     }
-  
+    
     try {
-      const response = await axios.post('https://clinic-backend-p4fx.onrender.com/api/auth/register', {
+      await axios.post('https://clinic-backend-p4fx.onrender.com/api/auth/register', {
         name: formData.name,
         email: formData.email,
         password: formData.password,
         role: formData.role
       });
-  
-      // If the registered user is a patient, navigate to the patient registration form
-      if (formData.role === 'patient') {
-        navigate('/register-patient'); // Change this route as per your actual patient form route
-      } else {
-        navigate('/login');
-      }
+      
+      navigate('/login');
     } catch (err: any) {
       setError(err.response?.data?.message || 'Registration failed. Please try again.');
     } finally {
       setLoading(false);
     }
   };
-  
 
   return (
     <div className="max-w-md mx-auto bg-white rounded-lg shadow-md overflow-hidden mt-10">
