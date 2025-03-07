@@ -85,7 +85,7 @@ const Login: React.FC = () => {
               placeholder="Email"
               value={formData.email}
               onChange={handleChange}
-              
+              required
             />
           </div>
 
