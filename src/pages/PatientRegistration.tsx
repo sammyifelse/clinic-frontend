@@ -254,7 +254,7 @@ const PatientRegistration: React.FC = () => {
                 rows={3}
                 value={formData.chiefComplaint}
                 onChange={handleChange}
-                required
+                
               />
             </div>
           </div>
