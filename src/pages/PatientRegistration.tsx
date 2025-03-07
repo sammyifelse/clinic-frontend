@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { ClipboardCheck } from 'lucide-react';
+import { UserContext } from '../context/UserContext'; // Update this import path if needed
 
 const PatientRegistration: React.FC = () => {
+  const { isLoggedIn } = useContext(UserContext);
+  
   const [formData, setFormData] = useState({
     fullName: '',
     age: '',
@@ -12,9 +15,9 @@ const PatientRegistration: React.FC = () => {
     medicalHistory: '',
     currentMedications: '',
     allergies: '',
-    disease: '', // Add disease
-    symptoms: '', // Add symptoms
-    diagnosis: '', // Add diagnosis
+    disease: '',
+    symptoms: '',
+    diagnosis: '',
     chiefComplaint: ''
   });
   
@@ -36,7 +39,26 @@ const PatientRegistration: React.FC = () => {
     setSuccess('');
     
     try {
-      await axios.post('https://clinic-backend-p4fx.onrender.com/api/patients', formData);
+      // Get token from localStorage
+      const token = localStorage.getItem('token');
+      
+      if (!token) {
+        setError('You must be logged in to register a patient');
+        setLoading(false);
+        return;
+      }
+      
+      // Create config with authorization header
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      };
+      
+      // Make the API request with the token
+      await axios.post('https://clinic-backend-p4fx.onrender.com/api/patients', formData, config);
+      
       setSuccess('Registration successful! Your information has been saved.');
       setFormData({
         fullName: '',
@@ -47,17 +69,29 @@ const PatientRegistration: React.FC = () => {
         medicalHistory: '',
         currentMedications: '',
         allergies: '',
-        disease: '', // Add disease
-        symptoms: '', // Add symptoms
-        diagnosis: '', // Add diagnosis
+        disease: '',
+        symptoms: '',
+        diagnosis: '',
         chiefComplaint: ''
       });
     } catch (err: any) {
+      console.error('Registration error:', err);
       setError(err.response?.data?.message || 'Registration failed. Please try again.');
     } finally {
       setLoading(false);
     }
   };
+
+  // If not logged in, show a message
+  if (!isLoggedIn) {
+    return (
+      <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-md overflow-hidden p-6">
+        <div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded mb-4">
+          You must be logged in to register a patient.
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-md overflow-hidden">

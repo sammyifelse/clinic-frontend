@@ -33,6 +33,14 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
 
+  // Set default axios authorization header if token exists
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    }
+  }, []);
+
   useEffect(() => {
     const checkLoggedIn = async () => {
       const token = localStorage.getItem("token");
@@ -43,8 +51,13 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
           const res = await axios.get(
             "https://clinic-backend-p4fx.onrender.com/api/auth/user"
           );
-          setUser(res.data);
+          
+          // Check the structure of the response to extract user data correctly
+          const userData = res.data.user || res.data;
+          setUser(userData);
           setIsLoggedIn(true);
+          
+          console.log("User authenticated:", userData);
         } catch (err) {
           console.error("Error fetching user:", err);
           logout();
@@ -69,9 +82,12 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
         "https://clinic-backend-p4fx.onrender.com/api/auth/user"
       );
 
-      // Fix: Extract the user object from the response
-      setUser(res.data.user); // <-- Change this line
+      // Check the structure of the response to extract user data correctly
+      const userData = res.data.user || res.data;
+      setUser(userData);
       setIsLoggedIn(true);
+      
+      console.log("Login successful:", userData);
     } catch (err) {
       console.error("Login failed:", err);
       logout();
@@ -79,36 +95,6 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
       setLoading(false);
     }
   };
-
-  // Also fix the same issue in the useEffect
-  useEffect(() => {
-    const checkLoggedIn = async () => {
-      const token = localStorage.getItem("token");
-
-      if (token) {
-        try {
-          axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-          const res = await axios.get(
-            "https://clinic-backend-p4fx.onrender.com/api/auth/user"
-          );
-
-          // Fix: Extract the user object from the response
-          setUser(res.data.user); // <-- Change this line
-          setIsLoggedIn(true);
-        } catch (err) {
-          console.error("Error fetching user:", err);
-          logout();
-        }
-      } else {
-        setUser(null);
-        setIsLoggedIn(false);
-      }
-
-      setLoading(false);
-    };
-
-    checkLoggedIn();
-  }, []);
 
   const logout = () => {
     localStorage.removeItem("token");
