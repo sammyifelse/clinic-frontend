@@ -9,7 +9,7 @@ const Register: React.FC = () => {
     email: '',
     password: '',
     confirmPassword: '',
-    role: 'patient'
+    role: 'patient' // Default role is patient
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -35,14 +35,17 @@ const Register: React.FC = () => {
     }
 
     try {
-      await axios.post('https://clinic-backend-p4fx.onrender.com/api/auth/register', {
+      const response = await axios.post('https://clinic-backend-p4fx.onrender.com/api/auth/register', {
         name: formData.name,
         email: formData.email,
         password: formData.password,
         role: formData.role
       });
 
-      if (formData.role === 'patient') {
+      // Check the response to ensure it contains the role
+      const role = response.data.role || formData.role; // Fallback to formData if not in response
+
+      if (role === 'patient') {
         navigate('/patient-registration');
       } else {
         navigate('/login');
