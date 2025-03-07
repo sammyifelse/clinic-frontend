@@ -1,5 +1,4 @@
-// ProtectedRoute.js
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import { Navigate } from 'react-router-dom';
 import { UserContext } from '../context/UserContext';
 
@@ -10,11 +9,6 @@ interface ProtectedRouteProps {
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, role }) => {
     const { user, loading, isLoggedIn } = useContext(UserContext);
-    const [render, setRender] = useState(false); // Add render state
-
-    useEffect(() => {
-        setRender(true); // Force re-render when user changes
-    }, [user]);
 
     if (loading) {
         return <div className="flex justify-center items-center h-screen">Loading...</div>;
@@ -30,7 +24,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, role }) => {
     }
 
     if (role && user?.role !== role) {
-        console.warn(`Access denied: Expected role '<span class="math-inline">\{role\}', but got '</span>{user?.role}'`);
+        console.warn(`Access denied: Expected role '${role}', but got '${user?.role}'`);
         return <Navigate to="/not-authorized" replace />;
     }
 
