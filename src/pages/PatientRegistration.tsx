@@ -1,11 +1,11 @@
 import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { ClipboardCheck } from 'lucide-react';
-import { UserContext } from '../context/UserContext';
+import { UserContext } from '../context/UserContext'; // Update this import path if needed
 
 const PatientRegistration: React.FC = () => {
   const { isLoggedIn } = useContext(UserContext);
-
+  
   const [formData, setFormData] = useState({
     fullName: '',
     age: '',
@@ -20,13 +20,16 @@ const PatientRegistration: React.FC = () => {
     diagnosis: '',
     chiefComplaint: ''
   });
-
+  
   const [success, setSuccess] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -34,26 +37,29 @@ const PatientRegistration: React.FC = () => {
     setLoading(true);
     setError('');
     setSuccess('');
-
+    
     try {
+      // Get token from localStorage
       const token = localStorage.getItem('token');
-
+      
       if (!token) {
-        setError('You must be logged in to register a patient.');
+        setError('You must be logged in to register a patient');
         setLoading(false);
         return;
       }
-
+      
+      // Create config with authorization header
       const config = {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         }
       };
-
+      
+      // Make the API request with the token
       await axios.post('https://clinic-backend-p4fx.onrender.com/api/patients', formData, config);
-
-      setSuccess('Patient registered successfully!');
+      
+      setSuccess('Registration successful! Your information has been saved.');
       setFormData({
         fullName: '',
         age: '',
@@ -69,68 +75,85 @@ const PatientRegistration: React.FC = () => {
         chiefComplaint: ''
       });
     } catch (err: any) {
+      console.error('Registration error:', err);
       setError(err.response?.data?.message || 'Registration failed. Please try again.');
     } finally {
       setLoading(false);
     }
   };
 
+  // If not logged in, show a message
   if (!isLoggedIn) {
     return (
-      <div className="max-w-lg mx-auto mt-10 bg-white shadow-lg rounded-lg p-6">
-        <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 rounded">
-          <p className="font-semibold">You must be logged in to register a patient.</p>
+      <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-md overflow-hidden p-6">
+        <div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded mb-4">
+          You must be logged in to register a patient.
         </div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-4xl mx-auto mt-10 bg-white shadow-2xl rounded-lg overflow-hidden">
-      <div className="bg-gradient-to-r from-teal-600 to-teal-400 text-white py-5 px-6 flex items-center">
-        <ClipboardCheck className="mr-3" size={28} />
-        <h2 className="text-2xl font-bold">Patient Registration</h2>
+    <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-md overflow-hidden">
+      <div className="bg-teal-600 text-white py-4 px-6 flex items-center">
+        <ClipboardCheck className="mr-2" size={24} />
+        <h2 className="text-xl font-bold">Patient Registration Form</h2>
       </div>
-
+      
       <div className="p-6">
         {success && (
-          <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded mb-4">
+          <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
             {success}
           </div>
         )}
-
+        
         {error && (
-          <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded mb-4">
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
             {error}
           </div>
         )}
-
-        <form onSubmit={handleSubmit} className="space-y-6">
+        
+        <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {[
-              { label: 'Full Name', name: 'fullName', type: 'text', placeholder: 'Enter full name' },
-              { label: 'Age', name: 'age', type: 'number', placeholder: 'Enter age' },
-              { label: 'Phone Number', name: 'phone', type: 'tel', placeholder: 'Enter phone number' },
-              { label: 'Address', name: 'address', type: 'text', placeholder: 'Enter address' }
-            ].map(({ label, name, type, placeholder }) => (
-              <div key={name}>
-                <label className="block text-gray-700 font-semibold">{label}</label>
-                <input
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition"
-                  type={type}
-                  name={name}
-                  placeholder={placeholder}
-                  value={(formData as any)[name]}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-            ))}
-
             <div>
-              <label className="block text-gray-700 font-semibold">Gender</label>
+              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="fullName">
+                Full Name
+              </label>
+              <input
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="fullName"
+                type="text"
+                name="fullName"
+                placeholder="Full Name"
+                value={formData.fullName}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            
+            <div>
+              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="age">
+                Age
+              </label>
+              <input
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="age"
+                type="number"
+                name="age"
+                placeholder="Age"
+                value={formData.age}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            
+            <div>
+              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="gender">
+                Gender
+              </label>
               <select
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="gender"
                 name="gender"
                 value={formData.gender}
                 onChange={handleChange}
@@ -141,34 +164,108 @@ const PatientRegistration: React.FC = () => {
                 <option value="other">Other</option>
               </select>
             </div>
-
-            {[
-              { label: 'Medical History', name: 'medicalHistory', placeholder: 'Previous conditions, surgeries, etc.' },
-              { label: 'Current Medications', name: 'currentMedications', placeholder: 'List of current medications' },
-              { label: 'Allergies', name: 'allergies', placeholder: 'List any allergies' },
-              { label: 'Chief Complaint', name: 'chiefComplaint', placeholder: 'Describe the main reason for the visit' }
-            ].map(({ label, name, placeholder }) => (
-              <div key={name} className="md:col-span-2">
-                <label className="block text-gray-700 font-semibold">{label}</label>
-                <textarea
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition"
-                  name={name}
-                  placeholder={placeholder}
-                  rows={3}
-                  value={(formData as any)[name]}
-                  onChange={handleChange}
-                />
-              </div>
-            ))}
+            
+            <div>
+              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="phone">
+                Phone Number
+              </label>
+              <input
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="phone"
+                type="tel"
+                name="phone"
+                placeholder="Phone Number"
+                value={formData.phone}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            
+            <div className="md:col-span-2">
+              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="address">
+                Address
+              </label>
+              <input
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="address"
+                type="text"
+                name="address"
+                placeholder="Address"
+                value={formData.address}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            
+            <div className="md:col-span-2">
+              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="medicalHistory">
+                Medical History
+              </label>
+              <textarea
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="medicalHistory"
+                name="medicalHistory"
+                placeholder="Previous medical conditions, surgeries, etc."
+                rows={3}
+                value={formData.medicalHistory}
+                onChange={handleChange}
+              />
+            </div>
+            
+            <div>
+              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="currentMedications">
+                Current Medications
+              </label>
+              <textarea
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="currentMedications"
+                name="currentMedications"
+                placeholder="List any medications you are currently taking"
+                rows={3}
+                value={formData.currentMedications}
+                onChange={handleChange}
+              />
+            </div>
+            
+            <div>
+              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="allergies">
+                Allergies
+              </label>
+              <textarea
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="allergies"
+                name="allergies"
+                placeholder="List any allergies you have"
+                rows={3}
+                value={formData.allergies}
+                onChange={handleChange}
+              />
+            </div>
+            
+            <div className="md:col-span-2">
+              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="chiefComplaint">
+                Chief Complaint
+              </label>
+              <textarea
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="chiefComplaint"
+                name="chiefComplaint"
+                placeholder="Describe your main reason for visit"
+                rows={3}
+                value={formData.chiefComplaint}
+                onChange={handleChange}
+                required
+              />
+            </div>
           </div>
-
+          
           <div className="mt-6">
             <button
-              className="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-6 rounded-lg transition-all transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-teal-500"
+              className="bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
               type="submit"
               disabled={loading}
             >
-              {loading ? 'Submitting...' : 'Register Patient'}
+              {loading ? 'Submitting...' : 'Submit Registration'}
             </button>
           </div>
         </form>
