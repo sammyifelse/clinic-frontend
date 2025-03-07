@@ -13,7 +13,7 @@ const Register: React.FC = () => {
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  
+
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -27,13 +27,13 @@ const Register: React.FC = () => {
     e.preventDefault();
     setLoading(true);
     setError('');
-    
+
     if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match');
       setLoading(false);
       return;
     }
-    
+
     try {
       await axios.post('https://clinic-backend-p4fx.onrender.com/api/auth/register', {
         name: formData.name,
@@ -41,8 +41,12 @@ const Register: React.FC = () => {
         password: formData.password,
         role: formData.role
       });
-      
-      navigate('/login');
+
+      if (formData.role === 'patient') {
+        navigate('/patient-registration');
+      } else {
+        navigate('/login');
+      }
     } catch (err: any) {
       setError(err.response?.data?.message || 'Registration failed. Please try again.');
     } finally {
@@ -56,14 +60,14 @@ const Register: React.FC = () => {
         <Stethoscope className="mr-2" size={24} />
         <h2 className="text-xl font-bold">Shifa Clinic Registration</h2>
       </div>
-      
+
       <div className="p-6">
         {error && (
           <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
             {error}
           </div>
         )}
-        
+
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
@@ -80,7 +84,7 @@ const Register: React.FC = () => {
               required
             />
           </div>
-          
+
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
               Email
@@ -96,7 +100,7 @@ const Register: React.FC = () => {
               required
             />
           </div>
-          
+
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
               Password
@@ -113,7 +117,7 @@ const Register: React.FC = () => {
               minLength={6}
             />
           </div>
-          
+
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="confirmPassword">
               Confirm Password
@@ -130,7 +134,7 @@ const Register: React.FC = () => {
               minLength={6}
             />
           </div>
-          
+
           <div className="mb-6">
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="role">
               Register as
@@ -147,7 +151,7 @@ const Register: React.FC = () => {
               <option value="doctor">Doctor</option>
             </select>
           </div>
-          
+
           <div className="flex items-center justify-between">
             <button
               className="bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
