@@ -35,10 +35,8 @@ const Login: React.FC = () => {
       console.log("Login Response:", res.data);
       const userRole = res.data.user.role;
 
-      // Wait for the login process to complete fully
       await login(res.data.token);
 
-      // Now we can safely redirect based on role
       console.log("Login successful. Redirecting based on role:", userRole);
       if (userRole === "doctor") {
         navigate("/doctor-dashboard");
@@ -47,77 +45,69 @@ const Login: React.FC = () => {
       }
     } catch (err: any) {
       console.error("Error during login:", err);
-      setError(
-        err.response?.data?.message || "Login failed. Please try again."
-      );
+      setError(err.response?.data?.message || "Login failed. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="max-w-md mx-auto bg-white rounded-lg shadow-md overflow-hidden mt-10">
-      <div className="bg-teal-600 text-white py-4 px-6 flex items-center justify-center">
-        <Stethoscope className="mr-2" size={24} />
-        <h2 className="text-xl font-bold">Shifa Clinic Login</h2>
-      </div>
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="w-full max-w-md bg-white rounded-lg shadow-lg overflow-hidden">
+        <div className="bg-teal-600 text-white py-5 px-6 flex items-center justify-center">
+          <Stethoscope className="mr-2" size={28} />
+          <h2 className="text-2xl font-semibold">Shifa Clinic Login</h2>
+        </div>
 
-      <div className="p-6">
-        {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-            {error}
-          </div>
-        )}
+        <div className="p-6">
+          {error && (
+            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+              {error}
+            </div>
+          )}
 
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label
-              className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="email"
-            >
-              Email
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="email"
-              type="email"
-              name="email"
-              placeholder="Email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
-          </div>
+          <form onSubmit={handleSubmit}>
+            <div className="mb-4">
+              <label className="block text-gray-700 font-medium mb-2" htmlFor="email">
+                Email
+              </label>
+              <input
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 transition"
+                id="email"
+                type="email"
+                name="email"
+                placeholder="Enter your email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+              />
+            </div>
 
-          <div className="mb-6">
-            <label
-              className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="password"
-            >
-              Password
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="password"
-              type="password"
-              name="password"
-              placeholder="Password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-            />
-          </div>
+            <div className="mb-6">
+              <label className="block text-gray-700 font-medium mb-2" htmlFor="password">
+                Password
+              </label>
+              <input
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 transition"
+                id="password"
+                type="password"
+                name="password"
+                placeholder="Enter your password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+              />
+            </div>
 
-          <div className="flex items-center justify-between">
             <button
-              className="bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
+              className="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-4 rounded-lg transition duration-200 focus:outline-none focus:ring-2 focus:ring-teal-500"
               type="submit"
               disabled={loading}
             >
               {loading ? "Logging in..." : "Sign In"}
             </button>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
     </div>
   );
