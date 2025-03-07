@@ -46,19 +46,19 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-500 to-teal-500">
-      <div className="relative bg-white/20 backdrop-blur-lg border border-white/30 rounded-2xl shadow-2xl p-8 max-w-md w-full">
-        {/* Decorative Circles */}
-        <div className="absolute -top-4 -right-4 w-12 h-12 bg-white/30 rounded-full shadow-lg"></div>
-        <div className="absolute -bottom-6 -left-6 w-16 h-16 bg-teal-400/40 rounded-full shadow-lg"></div>
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-[#FFDEE9] to-[#B5FFFC]">
+      <div className="relative bg-white/30 backdrop-blur-xl border border-white/50 rounded-3xl shadow-lg p-8 max-w-md w-full">
+        {/* Soft Floating Decorations */}
+        <div className="absolute -top-4 -right-4 w-10 h-10 bg-white/40 rounded-full shadow-md"></div>
+        <div className="absolute -bottom-6 -left-6 w-14 h-14 bg-teal-300/40 rounded-full shadow-lg"></div>
 
         {/* Header */}
         <div className="flex flex-col items-center mb-6">
-          <div className="flex items-center space-x-2 text-white">
-            <Stethoscope size={32} className="text-teal-300" />
-            <h2 className="text-2xl font-extrabold text-white">Shifa Clinic</h2>
+          <div className="flex items-center space-x-2 text-[#3A3A3A]">
+            <Stethoscope size={32} className="text-teal-500" />
+            <h2 className="text-2xl font-bold">Shifa Clinic</h2>
           </div>
-          <p className="text-white/80 text-sm">Your health, our priority</p>
+          <p className="text-[#3A3A3A]/70 text-sm">Your health, our priority</p>
         </div>
 
         {/* Error Message */}
@@ -71,9 +71,9 @@ const Login: React.FC = () => {
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-white text-sm font-semibold mb-1">Email</label>
+            <label className="block text-[#3A3A3A] text-sm font-semibold mb-1">Email</label>
             <input
-              className="w-full px-4 py-2 bg-white/30 text-white placeholder-white/70 border border-white/40 rounded-lg focus:ring-2 focus:ring-teal-300 focus:outline-none transition"
+              className="w-full px-4 py-2 bg-white/40 text-[#3A3A3A] placeholder-[#3A3A3A]/50 border border-white/50 rounded-lg focus:ring-2 focus:ring-teal-300 focus:outline-none transition"
               type="email"
               name="email"
               placeholder="Enter your email"
@@ -84,9 +84,9 @@ const Login: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-white text-sm font-semibold mb-1">Password</label>
+            <label className="block text-[#3A3A3A] text-sm font-semibold mb-1">Password</label>
             <input
-              className="w-full px-4 py-2 bg-white/30 text-white placeholder-white/70 border border-white/40 rounded-lg focus:ring-2 focus:ring-teal-300 focus:outline-none transition"
+              className="w-full px-4 py-2 bg-white/40 text-[#3A3A3A] placeholder-[#3A3A3A]/50 border border-white/50 rounded-lg focus:ring-2 focus:ring-teal-300 focus:outline-none transition"
               type="password"
               name="password"
               placeholder="Enter your password"
@@ -99,7 +99,7 @@ const Login: React.FC = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-2 bg-teal-500 hover:bg-teal-600 text-white font-semibold rounded-lg shadow-lg transition duration-200"
+            className="w-full py-2 bg-teal-400 hover:bg-teal-500 text-white font-semibold rounded-lg shadow-md transition duration-300"
           >
             {loading ? (
               <span className="flex items-center justify-center space-x-2">
@@ -128,7 +128,7 @@ const Login: React.FC = () => {
         </form>
 
         {/* Footer */}
-        <p className="mt-4 text-white/80 text-sm text-center">
+        <p className="mt-4 text-[#3A3A3A]/70 text-sm text-center">
           © 2025 Created by Samar
         </p>
       </div>
