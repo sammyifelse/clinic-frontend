@@ -12,6 +12,14 @@ const Navbar: React.FC = () => {
     navigate('/login');
   };
 
+  const handleSignIn = () => {
+    if (user?.role === 'patient') {
+      navigate('/patient-registration'); // Patients go directly to registration
+    } else {
+      navigate('/login'); // Doctors go to login first
+    }
+  };
+
   return (
     <nav className="bg-teal-600 text-white shadow-md">
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
@@ -19,7 +27,7 @@ const Navbar: React.FC = () => {
           <Stethoscope size={24} />
           <span className="text-xl font-bold">Shifa Clinic</span>
         </Link>
-        
+
         <div className="flex items-center space-x-4">
           {user ? (
             <>
@@ -40,12 +48,12 @@ const Navbar: React.FC = () => {
           ) : (
             <>
               <Link to="/login" className="hover:text-teal-200">Login</Link>
-              <Link 
-                to="/register" 
+              <button 
+                onClick={handleSignIn}
                 className="bg-teal-700 hover:bg-teal-800 px-3 py-1 rounded"
               >
                 Sign in
-              </Link>
+              </button>
             </>
           )}
         </div>
