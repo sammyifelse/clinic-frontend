@@ -42,7 +42,7 @@ const Register: React.FC = () => {
         role: formData.role
       });
       
-      navigate('/PatientRegistration.tsx');
+      navigate('/login');
     } catch (err: any) {
       setError(err.response?.data?.message || 'Registration failed. Please try again.');
     } finally {
