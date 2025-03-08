@@ -7,6 +7,7 @@ import DoctorDashboard from './pages/DoctorDashboard';
 import PatientRegistration from './pages/PatientRegistration';
 import ProtectedRoute from './components/ProtectedRoute';
 import Navbar from './components/Navbar';
+import Attendance from './pages/attendance'; // Import Attendance Page
 
 function App() {
   return (
@@ -31,6 +32,15 @@ function App() {
                 element={
                   <ProtectedRoute role="patient">
                     <PatientRegistration />
+                  </ProtectedRoute>
+                } 
+              />
+              {/* New Route for Attendance */}
+              <Route 
+                path="/attendance" 
+                element={
+                  <ProtectedRoute role="doctor">
+                    <Attendance />
                   </ProtectedRoute>
                 } 
               />
