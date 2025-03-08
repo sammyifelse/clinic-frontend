@@ -111,35 +111,31 @@ const DoctorDashboard: React.FC = () => {
           ) : (
             <div className="max-h-[calc(100vh-250px)] overflow-y-auto">
               <ul className="divide-y divide-gray-200">
-                {filteredPatients
-                  .slice()
-                  .reverse()
-                  .map((patient, index) => (
-                    <li
-                      key={patient._id}
-                      className={`py-3 px-2 cursor-pointer hover:bg-gray-50 ${
-                        selectedPatient?._id === patient._id
-                          ? "bg-teal-50 border-l-4 border-teal-500"
-                          : ""
-                      }`}
-                      onClick={() => handlePatientClick(patient)}
-                    >
-                      <div className="flex justify-between">
-                        <div>
-                          <p className="font-medium text-gray-800">
-                            {filteredPatients.length - index}.{" "}
-                            {patient.fullName}
-                          </p>
-                          <p className="text-sm text-gray-500">
-                            {patient.age} years, {patient.gender}
-                          </p>
-                        </div>
-                        <p className="text-xs text-gray-400">
-                          {formatDate(patient.createdAt)}
+                {filteredPatients.map((patient, index) => (
+                  <li
+                    key={patient._id}
+                    className={`py-3 px-2 cursor-pointer hover:bg-gray-50 ${
+                      selectedPatient?._id === patient._id
+                        ? "bg-teal-50 border-l-4 border-teal-500"
+                        : ""
+                    }`}
+                    onClick={() => handlePatientClick(patient)}
+                  >
+                    <div className="flex justify-between">
+                      <div>
+                        <p className="font-medium text-gray-800">
+                          {filteredPatients.length - index}. {patient.fullName}
+                        </p>
+                        <p className="text-sm text-gray-500">
+                          {patient.age} years, {patient.gender}
                         </p>
                       </div>
-                    </li>
-                  ))}
+                      <p className="text-xs text-gray-400">
+                        {formatDate(patient.createdAt)}
+                      </p>
+                    </div>
+                  </li>
+                ))}
               </ul>
             </div>
           )}
