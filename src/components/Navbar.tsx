@@ -24,18 +24,12 @@ const Navbar: React.FC = () => {
           {user ? (
             <>
               <span className="hidden md:inline">Welcome, {user.name}</span>
-              
               {user.role === 'doctor' && (
-                <>
-                  <Link to="/doctor-dashboard" className="hover:text-teal-200">Dashboard</Link>
-                  <Link to="/attendance" className="hover:text-teal-200">Attendance</Link> {/* Added Attendance Link */}
-                </>
+                <Link to="/doctor-dashboard" className="hover:text-teal-200">Dashboard</Link>
               )}
-
               {user.role === 'patient' && (
                 <Link to="/patient-registration" className="hover:text-teal-200">Registration</Link>
               )}
-
               <button 
                 onClick={handleLogout}
                 className="bg-teal-700 hover:bg-teal-800 px-3 py-1 rounded"
