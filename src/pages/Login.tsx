@@ -129,7 +129,7 @@ const Login: React.FC = () => {
 
         {/* Footer */}
         <p className="mt-4 text-[#3A3A3A]/70 text-sm text-center">
-          © 2025 Created by Samar
+          © 2025 Created by Samarjit
         </p>
       </div>
     </div>
